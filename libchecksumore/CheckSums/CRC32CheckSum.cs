@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CheckSuMore {
-    public abstract class ACheckSumFile {
-
+namespace CheckSuMore.CheckSums {
+    public class CRC32CheckSum: ACheckSum {
     }
 }

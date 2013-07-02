@@ -40,12 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ACheckSum.cs" />
-    <Compile Include="ACheckSumFile.cs" />
-    <Compile Include="AFileCheckSum.cs" />
+    <Compile Include="CheckSums\ACheckSum.cs" />
+    <Compile Include="CheckSumFiles\CheckSumBlankRecord.cs" />
+    <Compile Include="CheckSumFiles\CheckSumCommentRecord.cs" />
+    <Compile Include="CheckSumFiles\ACheckSumFile.cs" />
+    <Compile Include="CheckSumFiles\ACheckSumRecord.cs" />
+    <Compile Include="CheckSums\AFileCheckSum.cs" />
     <Compile Include="CheckSuMore.cs" />
+    <Compile Include="CheckSums\CRC32CheckSum.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="CheckSumFiles\CheckSumFileRecord.cs" />
+    <Compile Include="enums\ChecksumFileFormat.cs" />
+    <Compile Include="enums\ChecksumType.cs" />
+    <Compile Include="enums\ValidationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CheckSumFiles\SFVChecksumFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

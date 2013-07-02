@@ -8,6 +8,28 @@ using System.Security.Cryptography;
 namespace CheckSuMore {
     public class CheckSuMore {
         private const string WatchPath = "C:\test";
+        private const string FileName = "checksumore";
+
+        public void CheckPath(string dir_path, bool reursive) {
+            DirectoryInfo dir = new DirectoryInfo(dir_path);
+            if (!dir.Exists) {
+                throw new Exception(dir_path + " not found!");
+            }
+            ACheckSumFile csf = new SFVChecksumFile(Path.Combine(dir_path, String.Concat(FileName, ".sfv")));
+            ValidationResult result;
+
+            foreach (FileInfo file in dir.GetFiles()) {
+                System.Console.Out.WriteLine("Checking " + file.FullName);
+                result = csf.Validate(file);
+                switch (result) {
+                    case ValidationResult.Error:
+                        break;
+                }
+            }
+
+
+
+        }
 
         public string CheckFiles(string path) {
             DirectoryInfo dir = new DirectoryInfo(path);
