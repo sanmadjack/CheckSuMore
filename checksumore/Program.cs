@@ -15,7 +15,7 @@ namespace CheckSuMore
                                         "Args:" +
                                         "-r -R - Operate recursively, automatically descending into subfolders";
 
-        private static bool Recursive = false;
+        private static RecursionType Recursion = RecursionType.None;
 
         static void Main(string[] args)
         {
@@ -29,7 +29,7 @@ namespace CheckSuMore
                     switch (arg) {
                         case "-r":
                         case "-R":
-                            Recursive = true;
+                            Recursion = RecursionType.WithRootFile;
                             break;
                         default:
                             paths.Add(arg);
@@ -38,14 +38,12 @@ namespace CheckSuMore
                 }
             }
 
-            paths.Add("E:\\Docs");
-
             if (paths.Count == 0) { // If not scan lcoation is specified, the current folder is used
                 paths.Add(Environment.CurrentDirectory);
             }
             try {
                 foreach (string path in paths) {
-                    csm.CheckPath(path, Recursive);
+                    csm.CheckPath(path, Recursion);
                 }
             } catch (Exception e) {
                 do {
