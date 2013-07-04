@@ -29,7 +29,7 @@ namespace CheckSuMore {
                     continue;
                 }
 
-                System.Console.Out.WriteLine("Checking " + file.FullName);
+                System.Console.Out.WriteLine("Checking " +  csf.GetPathRelativeToFile(file));
                 result = csf.Validate(file);
                 switch (result) {
                     case ValidationResult.Failed:

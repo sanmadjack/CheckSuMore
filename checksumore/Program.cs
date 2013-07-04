@@ -52,7 +52,6 @@ namespace CheckSuMore
                     e = e.InnerException;
                 } while (e != null); 
             }
-            System.Console.In.ReadLine();
         }
     }
 }

@@ -12,7 +12,12 @@ namespace CheckSuMore {
         protected List<ACheckSumRecord> Records = new List<ACheckSumRecord>();
         protected Dictionary<string, CheckSumFileRecord> FileCheckSums = new Dictionary<string, CheckSumFileRecord>();
 
-        public void Save() {
+		// Abstract functions
+        protected abstract string RecordFile(CheckSumFileRecord record);
+        protected abstract string RecordComment(CheckSumCommentRecord record);
+        public abstract ValidationResult Validate(FileInfo file);
+
+		public void Save() {
             StringBuilder output = new StringBuilder();
             string line;
             foreach (ACheckSumRecord record in Records) {
@@ -30,10 +35,15 @@ namespace CheckSuMore {
             }
         }
 
-        protected abstract string RecordFile(CheckSumFileRecord record);
-        protected abstract string RecordComment(CheckSumCommentRecord record);
 
-        public abstract ValidationResult Validate(FileInfo file);
+        public string GetPathRelativeToFile(FileInfo file) {
+            DirectoryInfo this_file_dir = this.File.Directory;
+
+            if (file.FullName.StartsWith(this_file_dir.FullName)) {
+                return file.FullName.Substring(this_file_dir.FullName.Length).Trim(Path.DirectorySeparatorChar);
+            }
+            throw new Exception("File doe not appear to be a in the root or any subfolder");
+        }
     }
     public abstract class ACheckSumFile<T>: ACheckSumFile where T:ACheckSum {
 
@@ -84,16 +94,7 @@ namespace CheckSuMore {
 
         protected abstract ACheckSum PrepareCheckSum(string hash);
 
-        private string GetPathRelativeToFile(FileInfo file) {
-            StringBuilder output = new StringBuilder();
-            DirectoryInfo this_file_dir = this.File.Directory;
-            DirectoryInfo file_dir = file.Directory;
 
-            if (file.FullName.StartsWith(this_file_dir.FullName)) {
-                return file.FullName.Substring(this_file_dir.FullName.Length).Trim(Path.DirectorySeparatorChar);
-            }
-            throw new Exception("File doe not appear to be a in the root or any subfolder");
-        }
         
 
         public override ValidationResult Validate(FileInfo file) {
@@ -121,8 +122,6 @@ namespace CheckSuMore {
                 return ValidationResult.Failed;
             }
 
-
-            return ValidationResult.Error;
         }
 
 
