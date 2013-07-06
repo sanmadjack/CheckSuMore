@@ -7,6 +7,7 @@ namespace CheckSuMore {
     public enum ValidationResult {
         Error,
         Failed,
+        Changed,
         NewFile,
         Passed
     }

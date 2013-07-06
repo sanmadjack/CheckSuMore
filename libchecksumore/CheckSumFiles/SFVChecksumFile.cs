@@ -5,8 +5,8 @@ using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
 namespace CheckSuMore {
-    public class SFVChecksumFile: ACheckSumFile<CRC32CheckSum> {
-        public static Regex CommentRecordRegex = new Regex(";(?<comment>.*)");
+    public class SFVChecksumFile: ACheckSumFile {
+        public static Regex CommentRecordRegex = new Regex(";[ ]?(?<comment>.*)$");
         public static Regex FileRecordRegex = new Regex("^(?<filename>.+) (?<checksum>[0-9A-F]{8})$");
 
         protected override System.Text.RegularExpressions.Regex GetCommentRecordRegex {
@@ -38,7 +38,7 @@ namespace CheckSuMore {
             throw new NotImplementedException();
         }
 
-        protected override ACheckSum PrepareCheckSum(string hash) {
+        public override ACheckSum PrepareCheckSum(string hash) {
             throw new NotImplementedException();
         }
     }

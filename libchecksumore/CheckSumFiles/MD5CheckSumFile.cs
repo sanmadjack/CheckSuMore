@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 namespace CheckSuMore {
-    public class MD5CheckSumFile: ACheckSumFile<MD5CheckSum> {
-        public static Regex CommentRecordRegex = new Regex(";(?<comment>.*)");
+    public class MD5CheckSumFile: ACheckSumFile {
+        public static Regex CommentRecordRegex = new Regex(";[ ]?(?<comment>.*)$");
         public static Regex FileRecordRegex = new Regex(@"^(?<checksum>[a-f0-9]{32}) \*(?<filename>.+)$");
 
         protected override System.Text.RegularExpressions.Regex GetCommentRecordRegex {
@@ -30,14 +30,14 @@ namespace CheckSuMore {
         }
 
         protected override string RecordComment(CheckSumCommentRecord record) {
-            return string.Concat(";", record.Comment);
+            return string.Concat("; ", record.Comment);
         }
 
         protected override string RecordFile(CheckSumFileRecord record) {
             return String.Concat(record.CheckSum.Hash, " *", record.FileName);
         }
 
-        protected override ACheckSum PrepareCheckSum(string hash) {
+        public override ACheckSum PrepareCheckSum(string hash) {
             return new MD5CheckSum(hash);
         }
     }

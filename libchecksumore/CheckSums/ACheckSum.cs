@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 namespace CheckSuMore {
     public abstract class ACheckSum: IEquatable<ACheckSum> {
         public string Hash { get; protected set; }
+        public byte[] HashBytes { get; protected set; }
 
         protected abstract Regex GetCheckSumRegex { get; }
 

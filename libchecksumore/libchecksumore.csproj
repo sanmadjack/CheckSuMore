@@ -39,7 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckSuMoreFile\CheckSuMoreFile.cs" />
     <Compile Include="CheckSumFiles\MD5CheckSumFile.cs" />
+    <Compile Include="CheckSuMoreFile\CheckSuMoreFileItem.cs" />
+    <Compile Include="CheckSuMoreFile\CheckSuMoreFileItemHistoryEntry.cs" />
     <Compile Include="CheckSums\ACheckSum.cs" />
     <Compile Include="CheckSumFiles\CheckSumBlankRecord.cs" />
     <Compile Include="CheckSumFiles\CheckSumCommentRecord.cs" />

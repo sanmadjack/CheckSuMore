@@ -12,5 +12,7 @@ namespace CheckSuMore {
         }
 
         public MD5CheckSum(string hash) : base(hash.ToLower()) { }
+
+
     }
 }

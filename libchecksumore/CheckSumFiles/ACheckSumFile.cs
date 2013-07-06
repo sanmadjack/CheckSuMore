@@ -6,16 +6,44 @@ using System.IO;
 using System.Text.RegularExpressions;
 namespace CheckSuMore {
     public abstract class ACheckSumFile {
+        protected abstract Regex GetCheckSumRegex { get; }
+        protected abstract Regex GetCommentRecordRegex { get; }
         protected abstract string GetExtension { get; }
+        protected abstract Regex GetFileRecordRegex { get; }
 
-        protected FileInfo File;
+        public ACheckSumer CheckSumer { get; protected set; }
+        public FileInfo File { get; protected set; }
+        protected Dictionary<string, CheckSumFileRecord> FileCheckSumRecords = new Dictionary<string, CheckSumFileRecord>();
+        public Dictionary<string, ACheckSum> FileCheckSums {
+            get {
+                Dictionary<string, ACheckSum> output = new Dictionary<string, ACheckSum>();
+                foreach (string name in FileCheckSumRecords.Keys) {
+                    output.Add(name, FileCheckSumRecords[name].CheckSum);
+                }
+                return output;
+            }
+        }
+
         protected List<ACheckSumRecord> Records = new List<ACheckSumRecord>();
-        protected Dictionary<string, CheckSumFileRecord> FileCheckSums = new Dictionary<string, CheckSumFileRecord>();
 
 		// Abstract functions
+        public abstract ACheckSum PrepareCheckSum(string hash);
         protected abstract string RecordFile(CheckSumFileRecord record);
         protected abstract string RecordComment(CheckSumCommentRecord record);
-        public abstract ValidationResult Validate(FileInfo file);
+
+
+
+        protected ACheckSumFile(string file_path, ACheckSumer checksumer) {
+            File = new FileInfo(file_path);
+            if (File.Extension.ToLower().TrimStart('.') != GetExtension.ToLower()) {
+                throw new NotSupportedException("File does not have the expected extension. " + GetExtension + " was expected, " + File.Extension + " found");
+            }
+            this.CheckSumer = checksumer;
+            if (File.Exists) {
+                Records = Open();
+            }
+        }
+
 
 		public void Save() {
             StringBuilder output = new StringBuilder();
@@ -35,33 +63,8 @@ namespace CheckSuMore {
             }
         }
 
-
-        public string GetPathRelativeToFile(FileInfo file) {
-            DirectoryInfo this_file_dir = this.File.Directory;
-
-            if (file.FullName.StartsWith(this_file_dir.FullName)) {
-                return file.FullName.Substring(this_file_dir.FullName.Length).Trim(Path.DirectorySeparatorChar);
-            }
-            throw new Exception("File doe not appear to be a in the root or any subfolder");
-        }
-    }
-    public abstract class ACheckSumFile<T>: ACheckSumFile where T:ACheckSum {
-
-        protected abstract Regex GetCommentRecordRegex { get; }
-        protected abstract Regex GetFileRecordRegex { get; }
-        protected abstract Regex GetCheckSumRegex { get; }
-
-        protected ACheckSumer<T> CheckSumer;
-
-        protected ACheckSumFile(string file_path, ACheckSumer<T> checksumer) {
-            File = new FileInfo(file_path);
-            if (File.Extension.ToLower().TrimStart('.') != GetExtension.ToLower()) {
-                throw new NotSupportedException("File does not have the expected extension. " + GetExtension + " was expected, " + File.Extension + " found");
-            }
-            this.CheckSumer = checksumer;
-            if (File.Exists) {
-                Records = Open();
-            }
+        public List<ACheckSumRecord> GetRecords() {
+            return new List<ACheckSumRecord>(Records);
         }
 
         protected List<ACheckSumRecord> Open() {
@@ -81,7 +84,7 @@ namespace CheckSuMore {
                         string filename = matches[0].Groups["filename"].Value;
                         string checksum = matches[0].Groups["checksum"].Value;
                         record = new CheckSumFileRecord(filename, this.PrepareCheckSum(checksum));
-                        FileCheckSums.Add(filename, record as CheckSumFileRecord);
+                        FileCheckSumRecords.Add(filename, record as CheckSumFileRecord);
                     } else {
                         throw new NotSupportedException("A line in this file is not supported");
                     }
@@ -92,36 +95,49 @@ namespace CheckSuMore {
             return records;
         }
 
-        protected abstract ACheckSum PrepareCheckSum(string hash);
+        public bool HasFileRecordFor(FileInfo file) {
+            string relative_path = GetPathRelativeToFile(file);
+            return FileCheckSumRecords.ContainsKey(relative_path);
+        }
+
+        public ACheckSum GetCheckSumForFile(FileInfo file) {
+            string relative_path = GetPathRelativeToFile(file);
+            return FileCheckSumRecords[relative_path].CheckSum;
+        }
+
+        public string GetPathRelativeToFile(FileInfo file) {
+            DirectoryInfo this_file_dir = this.File.Directory;
+
+            if (file.FullName.StartsWith(this_file_dir.FullName)) {
+                return file.FullName.Substring(this_file_dir.FullName.Length).Trim(Path.DirectorySeparatorChar);
+            }
+            throw new Exception("File doe not appear to be a in the root or any subfolder");
+        }
+        public void AddCommentRecord(string comment) {
+            CheckSumCommentRecord record = new CheckSumCommentRecord(comment);
+            Records.Add(record);
+        }
+
+        public void ClearFile() {
+            Records.Clear();
+            FileCheckSumRecords.Clear();
+        }
 
 
-        
-
-        public override ValidationResult Validate(FileInfo file) {
+        public ACheckSum AddFileRecord(FileInfo file) {
+            string relative_path = GetPathRelativeToFile(file);
             ACheckSum file_checksum;
             CheckSumFileRecord record;
-            string relative_path = GetPathRelativeToFile(file);
-            if (!FileCheckSums.ContainsKey(relative_path)) {
-                using (Stream input = file.OpenRead()) {
-                    file_checksum = CheckSumer.Generate(input);
-                }
-                record = new CheckSumFileRecord(relative_path, file_checksum);
-                FileCheckSums.Add(relative_path, record);
-                Records.Add(record);
-                return ValidationResult.NewFile;
-            }
 
-            record = FileCheckSums[file.Name];
             using (Stream input = file.OpenRead()) {
                 file_checksum = CheckSumer.Generate(input);
             }
 
-            if (record.CheckSum.Equals(file_checksum)) {
-                return ValidationResult.Passed;
-            } else {
-                return ValidationResult.Failed;
-            }
+            record = new CheckSumFileRecord(relative_path, file_checksum);
+            FileCheckSumRecords.Add(relative_path, record);
+            Records.Add(record);
 
+            return file_checksum;
         }
 
 
