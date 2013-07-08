@@ -5,10 +5,13 @@ using System.Text;
 
 namespace CheckSuMore {
     public enum ValidationResult {
+		Unchecked,
         Error,
         Failed,
+		Missing,
         Changed,
-        NewFile,
+        New,
+		Moved,
         Passed
     }
 }

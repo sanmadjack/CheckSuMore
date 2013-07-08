@@ -43,8 +43,14 @@ namespace CheckSuMore {
             csf.AddCommentRecord("End Of File");
             csf.Save();
         }
-        
-        public ValidationResult Validate(FileInfo file) {
+
+		public void Validate() {
+
+
+
+		}
+
+        private ValidationResult Validate(FileInfo file) {
             CheckSumFileRecord record;
             ACheckSum checksum;
             if (!csf.HasFileRecordFor(file)) {
@@ -65,10 +71,6 @@ namespace CheckSuMore {
 
         }
 
-
-        public string GetPathRelativeToFile(FileInfo file) {
-            return csf.GetPathRelativeToFile(file);
-        }   
 
     }
 }

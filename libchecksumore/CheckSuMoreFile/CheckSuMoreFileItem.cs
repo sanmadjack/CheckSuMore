@@ -7,6 +7,8 @@ namespace CheckSuMore {
     class CheckSuMoreFileItem: IComparable {
         public string FileName { get; protected set; }
 
+		public ValidationResult Result = ValidationResult.Unchecked;
+
         private List<CheckSuMoreFileItemHistoryEntry> History;
         private ACheckSumer CheckSumer;
 
@@ -32,6 +34,10 @@ namespace CheckSuMore {
             History.Add(entry);
             return entry;
         }
+
+		public ValidationResult Validate() {
+
+		}
 
 
         public int CompareTo(object obj) {

@@ -12,6 +12,11 @@ namespace CheckSuMore {
         protected abstract Regex GetFileRecordRegex { get; }
 
         public ACheckSumer CheckSumer { get; protected set; }
+		public DirectoryInfo Directory {
+			get {
+				return File.Directory;
+			}
+		}
         public FileInfo File { get; protected set; }
         protected Dictionary<string, CheckSumFileRecord> FileCheckSumRecords = new Dictionary<string, CheckSumFileRecord>();
         public Dictionary<string, ACheckSum> FileCheckSums {
