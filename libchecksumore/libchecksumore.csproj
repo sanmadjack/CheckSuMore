@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckSuMoreFile\CheckSumFileTree.cs" />
     <Compile Include="CheckSuMoreFile\CheckSuMoreFile.cs" />
     <Compile Include="CheckSumFiles\MD5CheckSumFile.cs" />
     <Compile Include="CheckSuMoreFile\CheckSuMoreFileItem.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="enums\RecursionType.cs" />
     <Compile Include="enums\ValidationResult.cs" />
     <Compile Include="Exceptions\CheckSumTypeMismatchException.cs" />
+    <Compile Include="Exceptions\DirectoryNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CheckSumFiles\SFVChecksumFile.cs" />
   </ItemGroup>

@@ -10,11 +10,9 @@ namespace CheckSuMore {
 		public ValidationResult Result = ValidationResult.Unchecked;
 
         private List<CheckSuMoreFileItemHistoryEntry> History;
-        private ACheckSumer CheckSumer;
 
-        public CheckSuMoreFileItem(string primer_line, ACheckSumer checksumer) {
-            this.CheckSumer = checksumer;
-            FileName = AddHistoryEntry(primer_line).File;
+        public CheckSuMoreFileItem(CheckSumCommentRecord record) {
+            FileName = AddHistoryEntry(record).File;
         }
 
         public void Add(CheckSuMoreFileItemHistoryEntry item) {
@@ -26,8 +24,8 @@ namespace CheckSuMore {
             return FileName;
         }
 
-        public CheckSuMoreFileItemHistoryEntry AddHistoryEntry(string history_line) {
-            CheckSuMoreFileItemHistoryEntry entry = new CheckSuMoreFileItemHistoryEntry(history_line, CheckSumer);
+        public CheckSuMoreFileItemHistoryEntry AddHistoryEntry(CheckSumCommentRecord record) {
+            CheckSuMoreFileItemHistoryEntry entry = new CheckSuMoreFileItemHistoryEntry(record);
             if (FileName != null && FileName != entry.File) {
                 throw new Exception("This file is not for this item!");
             }

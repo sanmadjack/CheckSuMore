@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace CheckSuMore {
-    public enum ChecksumFileFormat {
-        SFV
+    public enum CheckSumFileFormat {
+        SFV,
+        MD5
     }
 }

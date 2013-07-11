@@ -18,15 +18,15 @@ namespace CheckSuMore {
         protected override Regex GetCheckSumRegex {
             get { return CRC32CheckSum.CheckSumRegex; }
         }
-
+        public const string Extension = "sfv";
         protected override string GetExtension {
             get {
-                return "sfv";
+                return Extension;
             }
         }
 
-        public SFVChecksumFile(string file_path)
-            : base(file_path, new CRC32CheckSumer()) {
+        public SFVChecksumFile(FileInfo file)
+            : base(file, new CRC32CheckSumer()) {
         }
 
 

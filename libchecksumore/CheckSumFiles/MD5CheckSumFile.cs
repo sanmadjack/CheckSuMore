@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.IO;
 namespace CheckSuMore {
     public class MD5CheckSumFile: ACheckSumFile {
         public static Regex CommentRecordRegex = new Regex(";[ ]?(?<comment>.*)$");
@@ -25,8 +26,8 @@ namespace CheckSuMore {
             }
         }
 
-        public MD5CheckSumFile(string file_path)
-            : base(file_path, new MD5CheckSumer()) {
+        public MD5CheckSumFile(FileInfo file)
+            : base(file, new MD5CheckSumer()) {
         }
 
         protected override string RecordComment(CheckSumCommentRecord record) {

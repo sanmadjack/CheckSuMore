@@ -38,8 +38,8 @@ namespace CheckSuMore {
 
 
 
-        protected ACheckSumFile(string file_path, ACheckSumer checksumer) {
-            File = new FileInfo(file_path);
+        protected ACheckSumFile(FileInfo file, ACheckSumer checksumer) {
+            this.File = file;
             if (File.Extension.ToLower().TrimStart('.') != GetExtension.ToLower()) {
                 throw new NotSupportedException("File does not have the expected extension. " + GetExtension + " was expected, " + File.Extension + " found");
             }
@@ -83,7 +83,7 @@ namespace CheckSuMore {
                         record = new CheckSumBlankRecord();
                     } else if (GetCommentRecordRegex.IsMatch(line)) {
                         matches = GetCommentRecordRegex.Matches(line);
-                        record = new CheckSumCommentRecord(matches[0].Groups["comment"].Value);
+                        record = new CheckSumCommentRecord(matches[0].Groups["comment"].Value, this);
                     } else if (GetFileRecordRegex.IsMatch(line)) {
                         matches = GetFileRecordRegex.Matches(line);
                         string filename = matches[0].Groups["filename"].Value;
@@ -116,7 +116,7 @@ namespace CheckSuMore {
             if (file.FullName.StartsWith(this_file_dir.FullName)) {
                 return file.FullName.Substring(this_file_dir.FullName.Length).Trim(Path.DirectorySeparatorChar);
             }
-            throw new Exception("File doe not appear to be a in the root or any subfolder");
+            throw new Exception("File does not appear to be a in the root or any subfolder");
         }
         public void AddCommentRecord(string comment) {
             CheckSumCommentRecord record = new CheckSumCommentRecord(comment);

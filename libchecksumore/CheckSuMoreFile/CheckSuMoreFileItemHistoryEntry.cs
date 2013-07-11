@@ -17,15 +17,15 @@ namespace CheckSuMore {
         private const string LastModifiedFieldName = "LastModified";
         private const string LastSeenFieldName = "LastSeen";
 
-        public CheckSuMoreFileItemHistoryEntry(string input, ACheckSumer checksumer) {
-            Dictionary<string, string> fields = DecodeInput(input);
+        public CheckSuMoreFileItemHistoryEntry(CheckSumCommentRecord input) {
+            Dictionary<string, string> fields = DecodeInput(input.Comment);
             foreach (string field in fields.Keys) {
                 switch (field) {
                     case FileFieldName:
                         File = fields[field];
                         break;
                     case HashFieldName:
-                        Hash = checksumer.Interpret(fields[field]);
+                        Hash = input.File.CheckSumer.Interpret(fields[field]);
                         break;
                     case LastModifiedFieldName:
                         LastModified = DateTime.Parse(fields[field]);
