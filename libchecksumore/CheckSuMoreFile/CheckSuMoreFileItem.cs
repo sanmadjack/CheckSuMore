@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.IO;
 namespace CheckSuMore {
     class CheckSuMoreFileItem: IComparable {
+        public FileInfo File { get; protected set; }
         public string FileName { get; protected set; }
 
 		public ValidationResult Result = ValidationResult.Unchecked;

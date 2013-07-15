@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckSuMoreFile\CheckSumFileTree.cs" />
     <Compile Include="CheckSuMoreFile\CheckSuMoreFile.cs" />
     <Compile Include="CheckSumFiles\MD5CheckSumFile.cs" />
     <Compile Include="CheckSuMoreFile\CheckSuMoreFileItem.cs" />
@@ -56,7 +55,6 @@
     <Compile Include="CheckSums\CRC32CheckSumer.cs" />
     <Compile Include="CheckSums\MD5CheckSum.cs" />
     <Compile Include="CheckSums\MD5CheckSumer.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="CheckSumFiles\CheckSumFileRecord.cs" />
     <Compile Include="enums\ChecksumFileFormat.cs" />
     <Compile Include="enums\ChecksumType.cs" />
